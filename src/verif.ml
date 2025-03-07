@@ -1,9 +1,8 @@
 exception Type_error of string
 
-(*env_typage associe un identifiant de variable à son type*)
-type env_typage = (idvar * typ) list
-(*env_fonctions associe un identifiant de fonction à une paire (liste des types des arguments, type de retour)*)
-type env_fonctions = (idfun * (typ list * typ)) list
+(*env_type associe un identifiant de variable à son type et 
+un identifiant de fonction à une paire (liste des types des arguments, type de retour)*)
+type env_type = (idvar * typ) list | (idfun * (typ list * typ)) list
 
 exception Type_error of string
 
