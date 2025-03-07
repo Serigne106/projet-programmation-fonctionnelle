@@ -1,8 +1,8 @@
 exception Type_error of string
 
 (*env_type associe un identifiant de variable à son type et 
-un identifiant de fonction à une paire (liste des types des arguments, type de retour)*)
-type env_type = (idvar * typ) list | (idfun * (typ list * typ)) list
+un identifiant de fonction à une paire (liste des types des arguments, type de retour)
+type env_type = (idvar * typ) list | (idfun * (typ list * typ)) list*)
 
 exception Type_error of string
 
@@ -18,9 +18,10 @@ let rec chercher_fonction f env =
   | [] -> raise (Type_error ("Fonction non définie: " ^ f))
   | (g, signature) :: rest -> if f = g then signature else chercher_fonction f rest
 
-(* Vérification du typage des expressions *)
-let rec verif_expr (env_vars : (idvar * typ) list) (env_funs : (idfun * (typ list * typ)) list) (e : expr) : typ =
-  match e with
+(* Vérification du typage des expressions 
+ verif_expr (env_vars : env_type) (env_funs : env_type ) (e : expr) : typ*)
+let rec verif_expr env_vars env_funs e  = match e with
+
   | Var x -> chercher_var x env_vars
   | IdFun f -> snd (chercher_fonction f env_funs)
   | Int _ -> TInt

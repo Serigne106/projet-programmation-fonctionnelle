@@ -2,6 +2,9 @@
 type typ = TInt | TBool
 (*type env_type = (string * typ) list*)
 
+
+
+
 (* Fonction de vérification de typage d'une expression *)
 
 (* Définition de l'arbre de syntaxe abstrait des expressions de SimpleML *)
@@ -10,6 +13,18 @@ type typ = TInt | TBool
   de variable et les identitifiants de fonction.*)
 type idvar = string
 type idfun = string
+
+
+(*env_type associe un identifiant de variable à son type et 
+un identifiant de fonction à une paire (liste des types des arguments, type de retour)*)
+type env_type = 
+   | VarEnv of  (idvar * typ) list
+   | FunEnv of  (idfun * (typ list * typ)) list
+
+  
+
+
+
 
 (* Pour factoriser la présentation des opérateurs binaires, on utilise un type énuméré
 binary_op de tous les opérateurs binaires de la syntaxe de SimpleML *)
@@ -39,7 +54,7 @@ type expr =
   | UnaryOp of unary_op * expr
   | If of expr * expr * expr
   | Let of idvar * typ * expr * expr
-  | App of idfun * expr list
+  | App of idfun * expr list 
 
 (* Définition du type des déclarations de fonction de SimpleML *)
 
