@@ -16,7 +16,8 @@ let rec chercher_var x env =
 let rec chercher_fonction f env =
   match env with
   | [] -> raise (Type_error ("Fonction non définie: " ^ f))
-  | (g, signature) :: rest -> if f = g then signature else chercher_fonction f rest
+  | (g,(l, t_retour)) :: rest -> if f = g then 
+                      else chercher_fonction f rest
 
 (* Vérification du typage des expressions 
  verif_expr (env_vars : env_type) (env_funs : env_type ) (e : expr) : typ*)
