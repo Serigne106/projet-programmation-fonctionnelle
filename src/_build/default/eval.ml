@@ -5,7 +5,7 @@ let get_lineBuffer () =
   if Array.length Sys.argv < 2 then
     failwith "Le nom de fichier à évaluer n'a pas été passé en argument."
   else
-    try 
+    try
        (* Récupère le nom de fichier depuis les arguments de la ligne de commande *)
       let filename = Sys.argv.(1) in
       (* Ouvre le fichier en mode lecture *)
