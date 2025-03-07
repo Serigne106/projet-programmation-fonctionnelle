@@ -1,6 +1,6 @@
 (* typ représente les types de SimpleML *)
 type typ = TInt | TBool
-type env_type = (string * typ) list
+(*type env_type = (string * typ) list*)
 
 (* Fonction de vérification de typage d'une expression *)
 
