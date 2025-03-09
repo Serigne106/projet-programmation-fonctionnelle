@@ -33,26 +33,16 @@ let rec chercher_fonction id env =
  let rec verif_expr env_vars env_funs e  = match e with
   | Var x -> chercher_var x env_vars
   | IdFun f -> chercher_fonction f env_funs
-  | Int x -> true
-  | Bool b -> true  
-  | BinaryOp (op, e1, e2)   -> 
-      let t1 = verif_expr env_vars env_funs e1 in
+  | Int x -> TInt 
+  | Bool b -> TBool 
+  | BinaryOp (op, e1, e2) -> 
+    let t1 = verif_expr env_vars env_funs e1 in
       let t2 = verif_expr env_vars env_funs e2 in
-      match op with
-      | Plus | Minus | Mult | Div -> 
-          if t1 = TInt && t2 = TInt then TInt
-          else failwith("Les deux opérandes d'une opération arithmétique doivent être des entiers")
-      | And | Or -> 
-          if t1 = TBool && t2 = TBool then TBool
-          else failwith("Les deux opérandes d'une opération logique doivent être des booléens")
-      | Equal | NEqual -> 
-          if t1 = t2 then TBool
-          else failwith("Les deux opérandes d'une opération de comparaison doivent être du même type")
-      | Less | LessEq | Great | GreatEq -> 
-          if t1 = TInt && t2 = TInt then TBool
-          else failwith("Les deux opérandes d'une opération de comparaison doivent être des entiers")
-
-    | _ -> failwith ("Erreur de typage dans une opération binaire")
+      match op, t1, t2 with 
+      | (Plus | Minus | Mult | Div), TInt, TInt -> TInt
+      | (And | Or), TBool, TBool -> TBool
+      | (Equal | NEqual | Less | LessEq | Great | GreatEq), TInt, TInt -> TBool
+      | _ -> failwith ("Erreur de typage dans une opération binaire")
   | UnaryOp (Not, e) -> 
       match verif_expr env_vars env_funs e with
       | TBool -> TBool
@@ -65,7 +55,7 @@ let rec chercher_fonction id env =
       if t1 = t2 then t1
       else failwith ("Les deux branches du 'if' doivent avoir le même type")
   | Let (x, typ, e1, e2) ->
-      let t1 = verif_expr env_vars env_funs e1 in 
+      let t1 = verif_expr env_vars env_funs e1 in
       if t1 = typ then
         let new_env = (x, typ) :: env_vars in
         verif_expr new_env env_funs e2
