@@ -15,14 +15,6 @@ type idvar = string
 type idfun = string
 
 
-(*env_type associe un identifiant de variable à son type et 
-un identifiant de fonction à une paire (liste des arguments et leurs types , type de retour de la fonction)*)
-type env_type = 
-   | VarEnv of  (idvar * typ) list
-   | FunEnv of  (idfun * ((idvar*typ) list * typ)) list 
-
-type env_val = (idvar * typ) list
-
 
 (* Pour factoriser la présentation des opérateurs binaires, on utilise un type énuméré
 binary_op de tous les opérateurs binaires de la syntaxe de SimpleML *)

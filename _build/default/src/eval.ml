@@ -1,3 +1,6 @@
+
+open Verif
+
 (* La fonction suivante récupère le nom de fichier passé en argument de la ligne de commande,
 ouvre le fichier et applique l'analyse lexicale dessus, renvoyant une valeur de type Lexing.lexbuf *)
 let get_lineBuffer () =
@@ -22,6 +25,8 @@ let get_lineBuffer () =
     | Parser.Error ->
         failwith "Erreur de syntaxe dans le programme fourni en entrée."
 
+
+      let env = env_vide   
         (* Point d'entrée principal du programme *)
 let () =
   (* Récupère le buffer lexical à partir du fichier d'entrée *)
@@ -30,10 +35,10 @@ let () =
     (* Analyse syntaxique du programme à partir du buffer lexical *)
     let prog = Parser.prog Lexer.token lineBuffer in
       (* Décommenter la ligne suivante pour afficher le programme analysé *)
-    (* print_string (Syntax.string_of_programme prog); *)
+     (*print_string (Syntax.string_of_programme prog); *)
     (* Vérifie le typage du programme *)
     (*print_string (Syntax.string_of_programme prog);*)
-    let type_ok = Verif.verif_prog prog in
+    let type_ok = Verif.verif_prog prog env in
     if type_ok then 
       (* Évalue le programme si le typage est correct *)
       Evaluateur.eval_prog prog
