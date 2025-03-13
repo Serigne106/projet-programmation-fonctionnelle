@@ -56,6 +56,7 @@ let rec verif_expr env e typ_attendu =
           verif_expr env e1 TBool && verif_expr env e2 TBool  (* Les deux opérandes doivent être des booléens *)
 
       | Equal | NEqual -> 
+        (*
           let t1 = match e1 with 
             | Var x -> chercher_var x env.var_env 
             | _ -> failwith "Expression incorrecte, une variable est attendue"
@@ -66,6 +67,14 @@ let rec verif_expr env e typ_attendu =
           in
           if t1 = t2 then typ_attendu = TBool  (* Les deux opérandes doivent être du même type et le type attendu doit être TBool *)
           else failwith "Les deux opérandes d'une comparaison doivent être du même type"
+          *)
+
+            let t1 = verif_expr env e1 TInt in
+            let t2 = verif_expr env e2 TInt in
+            if t1 && t2 then typ_attendu = TBool  
+            else failwith "Les deux opérandes d'une comparaison doivent être du même type"
+        
+
 
       | Less | LessEq | Great | GreatEq -> 
           if typ_attendu <> TBool then failwith "Une comparaison doit retourner un booléen";
@@ -100,21 +109,44 @@ let rec verif_expr env e typ_attendu =
 
   | _ -> failwith "Erreur de typage"
 
-(* Vérification de la déclaration d'une fonction *)
-let rec verif_decl_fun f env =
-  match env.fun_env with
-  | [] -> false  (* La fonction n'est pas trouvée *)
-  | (g, (param_types, _)) :: rest ->
-      if f.id = g then comparer_type f.var_list param_types else verif_decl_fun f { var_env = env.var_env; fun_env = rest }  (* On compare les types des paramètres *)
 
-(* Vérification du programme *)
+  (* Vérification d'une déclaration de fonction *)
+let verif_decl_fun env fdecl =
+  let params_env = {
+    var_env = List.map (fun (x, t) -> (x, t)) fdecl.var_list; (* Ajout des paramètres à l'env local *)
+    fun_env = env.fun_env
+  } in
+  verif_expr params_env fdecl.corps fdecl.typ_retour (* Vérifie que le corps de la fonction est bien typé *)
+
+(* Vérification d'un programme *)
+let verif_prog prog =
+  (* Construire l'environnement initial avec toutes les fonctions *)
+  let init_env = {
+    var_env = []; (* Pas de variables globales *)
+    fun_env = List.map (fun f -> 
+      (f.id, (f.var_list, f.typ_retour)) (* Stocke les paramètres et le type de retour *)
+    ) prog
+  } in 
+  (* Vérifier que toutes les fonctions sont bien typées *)
+  let all_funs_ok = List.for_all (fun f -> verif_decl_fun init_env f) prog in
+
+  (* Vérifier la présence d'une fonction `main` sans paramètres *)
+  let has_valid_main = List.exists (fun f -> f.id = "main" && f.var_list = []) prog in
+  all_funs_ok && has_valid_main (* Retourne vrai si tout est bien typé et que main() est défini *)
+
+  
+
+
+
+
+(* Vérification du programme 
 let rec verif_prog prog env =
   match prog with
   | [] -> true  (* Le programme est vide, il est donc correct *)
   | f :: rest -> if verif_decl_fun f env then verif_prog rest env  (* On vérifie chaque fonction du programme *)
-                 else failwith "Erreur de typage dans le programme"
+                 else failwith "Erreur de typage dans le programme" 
       
-
+*)
 
 
 (*#######################################################################################################*)

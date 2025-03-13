@@ -4,4 +4,7 @@
  (modules parser))
 
 (executable
- (name eval))
+ (name eval)
+ (modules eval syntax evaluateur verif lexer parser)
+ )
+
