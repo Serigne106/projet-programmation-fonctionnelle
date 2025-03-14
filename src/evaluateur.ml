@@ -1,9 +1,14 @@
 open Syntax 
 
-type var_val = {var:idvar; valeur:typ}
+
+type valeur = 
+  | ValInt of int 
+  | ValBool of bool
+
+type var_val = {var:idvar; valeur:valeur}
 type env_val = var_val list
 
-(* Fonction pour chercher la valeur  d'une variable dans l'environnement *)
+(*Fonction pour chercher la valeur  d'une variable dans l'environnement *)
 let rec chercher_val x env_val =
   match env_val with
   | [] -> failwith ("Variable non définie: " ^ x)  (* La variable n'est pas trouvée *)
@@ -14,7 +19,7 @@ let rec eval_expr env e typ_attendu=
   match e with
   | Var x -> chercher_val x env
 
-  (*| Int x-> chercher_val x env*)
+  | Int x-> ValInt
 
   | Bool b-> chercher_val b env
   
@@ -63,8 +68,8 @@ let rec eval_expr env e typ_attendu=
 
 let verif_decl_fun env fdecl =
   let params_val = {
-    val_env = List.map (fun (x, t) -> (x, t)) fdecl.var_list; (* Ajout des paramètres à l'env local *)
+    val_env = List.map (fun (x, t) -> (x, t)) fdecl.var_list; 
     fun_env = env.fun_env
   } in
-  verif_expr params_env fdecl.corps fdecl.typ_retour (* Vérifie que le corps de la fonction est bien typé *)
+  verif_expr params_env fdecl.corps fdecl.typ_retour *)
   
