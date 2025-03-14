@@ -1,4 +1,4 @@
-# dune exec -- src/eval.exe Test/Mauvais/test1.sml
+# dune exec -- src/eval.exe Test/Bon/test1.sml
 # OCAMLPARAM: unset
 # Shared cache: enabled-except-user-rules
 # Shared cache location: /home/mbaye/.cache/dune/db
@@ -13,4 +13,4 @@
 #  ; build_dir = In_build_dir "default"
 #  ; instrument_with = []
 #  }
-$ /home/mbaye/.opam/5.3.0/bin/ocamlc.opt -config > /tmp/dune_bab00e_output
+$ /home/mbaye/.opam/5.3.0/bin/ocamlc.opt -config > /tmp/dune_4dc6b8_output

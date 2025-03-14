@@ -6,7 +6,7 @@ type env_type = {
   fun_env : (idfun * ((idvar * typ) list * typ)) list;  (* Environnement des fonctions : liste d'associations (nom de fonction, (liste de paramètres, type de retour)) *)
 }
 
-(* Environnement vide *)
+(* Environnement vide *) 
 let env_vide = {
   var_env = [];  (* Pas de variables *)
   fun_env = [];  (* Pas de fonctions *)
@@ -56,7 +56,7 @@ let rec verif_expr env e typ_attendu =
           verif_expr env e1 TBool && verif_expr env e2 TBool  (* Les deux opérandes doivent être des booléens *)
 
       | Equal | NEqual -> 
-        (*
+        
           let t1 = match e1 with 
             | Var x -> chercher_var x env.var_env 
             | _ -> failwith "Expression incorrecte, une variable est attendue"
@@ -67,15 +67,9 @@ let rec verif_expr env e typ_attendu =
           in
           if t1 = t2 then typ_attendu = TBool  (* Les deux opérandes doivent être du même type et le type attendu doit être TBool *)
           else failwith "Les deux opérandes d'une comparaison doivent être du même type"
-          *)
+          
 
-            let t1 = verif_expr env e1 TInt in
-            let t2 = verif_expr env e2 TInt in
-            if t1 && t2 then typ_attendu = TBool  
-            else failwith "Les deux opérandes d'une comparaison doivent être du même type"
-        
-
-
+  
       | Less | LessEq | Great | GreatEq -> 
           if typ_attendu <> TBool then failwith "Une comparaison doit retourner un booléen";
           verif_expr env e1 TInt && verif_expr env e2 TInt  (* Les deux opérandes doivent être des entiers *)
