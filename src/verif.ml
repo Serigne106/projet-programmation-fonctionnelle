@@ -6,11 +6,6 @@ type env_type = {
   fun_env : (idfun * ((idvar * typ) list * typ)) list;  (* Environnement des fonctions : liste d'associations (nom de fonction, (liste de paramètres, type de retour)) *)
 }
 
-(* Environnement vide *) 
-let env_vide = {
-  var_env = [];  (* Pas de variables *)
-  fun_env = [];  (* Pas de fonctions *)
-}
 
 (* Fonction pour comparer deux listes de types *)
 let rec comparer_type env1 env2 = match (env1, env2) with
