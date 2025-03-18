@@ -18,6 +18,8 @@
 %token TINT
 %token TBOOL
 
+%token SEMICOLON
+
 %left ELSE IN
 %nonassoc NOT
 %nonassoc EQ NEQ GREAT GREATEQ LESS LESSEQ
@@ -71,6 +73,7 @@ expr:
   | expr GREATEQ expr  { BinaryOp (GreatEq, $1, $3) }
   | expr LESS expr    { BinaryOp (Less, $1, $3) }
   | expr LESSEQ expr  { BinaryOp (LessEq, $1, $3) }
+  | expr SEMICOLON expr { Seq ($1, $3) }
 
 app_expr:
   | VAR LPAR list_expr RPAR { App ($1, $3) }

@@ -1,15 +1,8 @@
-<<<<<<< HEAD
 # dune exec -- src/eval.exe Test/Bon/test1.sml
-=======
-# C:\Users\mbourycisse\AppData\Local\opam\default\bin\dune.exe exec -- src/eval.exe Test/Bon/test1.sml
->>>>>>> refs/remotes/origin/main
 # OCAMLPARAM: unset
 # Shared cache: enabled-except-user-rules
-# Shared cache location:
-# C:\Users\mbourycisse\AppData\Local\Microsoft\Windows\INetCache\dune\db
-# Workspace root: "C:\\Users\\mbourycisse\\Desktop\\L3 Informatique
-# Nantes\\semestre2\\Programmation
-# Fonctionnelle\\projet-programmation-fonctionnelle"
+# Shared cache location: /home/mbaye/.cache/dune/db
+# Workspace root: /home/mbaye/projet-programmation-fonctionnelle
 # Auto-detected concurrency: 8
 # Dune context:
 #  { name = "default"
@@ -20,16 +13,4 @@
 #  ; build_dir = In_build_dir "default"
 #  ; instrument_with = []
 #  }
-<<<<<<< HEAD
-$ /home/mbaye/.opam/5.3.0/bin/ocamlc.opt -config > /tmp/dune_4dc6b8_output
-=======
-$ C:\Users\mbourycisse\AppData\Local\opam\default\bin\ocamlc.opt.exe -config > C:\Users\MBOURY~1\AppData\Local\Temp\dune_153bc7_output
-$ (cd _build/default && C:\Users\mbourycisse\AppData\Local\opam\default\bin\ocamlc.opt.exe -w @1..3@5..28@30..39@43@46..47@49..57@61..62-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -bin-annot-occurrences -I src/.eval.eobjs/byte -no-alias-deps -opaque -open Dune__exe -o src/.eval.eobjs/byte/dune__exe__Evaluateur.cmo -c -impl src/evaluateur.ml)
-> File "src/evaluateur.ml", line 92, characters 38-41:
-> 92 |       let f_val = chercher_fonction f env in
->                                            ^^^
-> Error: The value env has type var_val list
->        but an expression was expected of type (string * ('a * 'b)) list
->        Type var_val is not compatible with type string * ('a * 'b)
-[2]
->>>>>>> refs/remotes/origin/main
+$ /home/mbaye/.opam/5.3.0/bin/ocamlc.opt -config > /tmp/dune_f34970_output
