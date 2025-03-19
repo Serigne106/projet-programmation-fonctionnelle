@@ -6,13 +6,17 @@ type token =
   | TRUE
   | TINT
   | THEN
+  | TFLOAT
   | TBOOL
   | SEMICOLON
   | RPAR
+  | PLUSPT
   | PLUS
   | NOT
   | NEQ
+  | MULTPT
   | MULT
+  | MINUSPT
   | MINUS
   | LPAR
   | LOR
@@ -25,10 +29,12 @@ type token =
   | IF
   | GREATEQ
   | GREAT
+  | FLOAT of (float)
   | FALSE
   | EQ
   | EOF
   | ELSE
+  | DIVPT
   | DIV
   | COMMA
   | COLON

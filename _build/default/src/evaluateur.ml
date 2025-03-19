@@ -4,6 +4,7 @@ open Syntax
 type valeur = 
   | ValInt of int  (* Représente une valeur entière *)
   | ValBool of bool  (* Représente une valeur booléenne *)
+  | ValFloat of float  (* Représente une valeur flottante *)
 
 (* Définition des environnements d'évaluation *)
 type env_val = (idvar * valeur) list  (* Associe les variables à leurs valeurs *)
@@ -51,6 +52,18 @@ let rec eval_expr env_val env_funs e =
       | (LessEq, ValInt a, ValInt b) -> ValBool (a <= b)  (* Inférieur ou égal à *)
       | (Great, ValInt a, ValInt b) -> ValBool (a > b)  (* Supérieur à *)
       | (GreatEq, ValInt a, ValInt b) -> ValBool (a >= b)  (* Supérieur ou égal à *)
+      
+      | (Equal, ValFloat a, ValFloat b) -> ValBool (a = b)  (* Égalité pour les flotants *)
+      | (NEqual, ValFloat a, ValFloat b) -> ValBool (a <> b)  (* Inégalité pour les flotants *)
+      | (Less, ValFloat a, ValFloat b) -> ValBool (a < b)  (* Inférieur à *)
+      | (LessEq, ValFloat a, ValFloat b) -> ValBool (a <= b)  (* Inférieur ou égal à *)
+      | (Great, ValFloat a, ValFloat b) -> ValBool (a > b)  (* Supérieur à *)
+      | (GreatEq, ValFloat a, ValFloat b) -> ValBool (a >= b)  (* Supérieur ou égal à *)
+
+      |(PlusPT, ValFloat a, ValFloat b) -> ValFloat (a +. b)  (* Addition *)
+      |(MinusPT, ValFloat a, ValFloat b) -> ValFloat (a -. b)  (* Addition *)
+      |(MultPT, ValFloat a, ValFloat b) -> ValFloat (a *. b)  (* Addition *)
+      |(DivPT, ValFloat a, ValFloat b) -> ValFloat (a /. b)  (* Addition *)
 
       | _ -> failwith "Erreur de types dans l'opération binaire"  (* Si les types ne correspondent pas *)
     )
@@ -119,5 +132,6 @@ let eval_prog prog =
     match result with
     | ValInt n -> print_endline (string_of_int n)  (* Afficher un entier *)
     | ValBool b -> print_endline (string_of_bool b)  (* Afficher un booléen *)
+    | ValFloat f -> print_endline (string_of_float f)  (* Afficher un flottant *)
   with Not_found ->
     failwith "La fonction 'main' est absente du programme"  (* Si `main` n'est pas définie *)

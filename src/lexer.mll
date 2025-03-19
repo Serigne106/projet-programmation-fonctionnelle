@@ -12,9 +12,11 @@
 
 let space = [' ' '\t' '\n' '\r']
 let digit = ['0'-'9']
+let digitf = ['0'-'9']+ '.' ['0'-'9']
 let alpha = ['a'-'z' 'A'-'Z']
 let ident = ['a'-'z'] (alpha | '_' | '\'' | digit)*
 let integer = digit+
+let floatant = digitf+
 
 rule token = parse
   | '\n'  { newline lexbuf; token lexbuf }
@@ -27,6 +29,11 @@ rule token = parse
   | '-'  { MINUS }
   | '*'  { MULT }
   | '/'  { DIV }
+
+  | "+."  { PLUSPT }
+  | "-."  { MINUSPT }
+  | "*."  { MULTPT }
+  | "/."  { DIVPT }
 
   | "true" { TRUE }
   | "false" { FALSE }
@@ -51,6 +58,7 @@ rule token = parse
 
   | "int" { TINT }
   | "bool" { TBOOL }
+  | "float" { TFLOAT }
 
 
   | '('  { LPAR }
@@ -63,6 +71,7 @@ rule token = parse
 
 
   | integer as n  { INT (int_of_string n) }
+  | floatant as f  { FLOAT (float_of_string f) }
   | ident as id  { VAR id }
 
   | _  { raise Error }

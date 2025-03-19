@@ -34,6 +34,10 @@ type binary_op =
   | LessEq
   | Great
   | GreatEq
+  | PlusPT
+  | MinusPT
+  | MultPT
+  | DivPT
 
 type unary_op = Not
 
@@ -41,6 +45,7 @@ type expr =
   | Var of idvar
   | IdFun of idfun
   | Int of int
+  | Float of float
   | Bool of bool
   | BinaryOp of binary_op * expr * expr
   | UnaryOp of unary_op * expr
@@ -80,6 +85,16 @@ let string_of_binary_op binop =
   | LessEq -> "<="
   | Great -> ">"
   | GreatEq -> ">="
+  | PlusPT -> "+."
+  | MinusPT -> "-."
+  | MultPT -> "*."
+  | DivPT -> "/."
+
+(*operation print_in affichant un entier*)
+let print_entier n = print_int n
+ 
+(*Fonction recursive*)
+
 
 let string_of_unary_op unop = match unop with Not -> "not"
 
@@ -94,6 +109,7 @@ and string_of_expr expr =
   | Var x -> x
   | IdFun x -> x
   | Int n -> string_of_int n
+  | Float f -> string_of_float f
   | Bool b -> string_of_bool b
   | BinaryOp (binop, expr1, expr2) ->
       string_of_expr expr1 ^ string_of_binary_op binop ^ string_of_expr expr2

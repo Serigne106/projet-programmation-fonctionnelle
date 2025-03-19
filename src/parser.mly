@@ -5,9 +5,11 @@
 
 %token EOF
 %token <int> INT
+%token <float> FLOAT
 %token <Syntax.idvar> VAR
 %token EQ
 %token PLUS MINUS MULT DIV
+%token PLUSPT MINUSPT MULTPT DIVPT
 %token LAND LOR NOT
 %token NEQ GREAT GREATEQ LESS LESSEQ
 %token TRUE FALSE
@@ -17,7 +19,7 @@
 
 %token TINT
 %token TBOOL
-
+%token TFLOAT
 %token SEMICOLON
 
 %left ELSE IN
@@ -27,6 +29,8 @@
 %left LAND
 %left PLUS MINUS
 %left MULT DIV
+%left PLUSPT MINUSPT
+%left MULTPT DIVPT
 
 
 %start prog
@@ -40,6 +44,7 @@ prog: list_implem_decl; EOF  { $1 }
 ty:
   | TBOOL        { TBool }
   | TINT         { TInt }
+  | TFLOAT       { TFloat }
 
 fun_decl:
   | LET VAR LPAR list_typed_ident RPAR COLON ty EQ expr
@@ -53,6 +58,7 @@ list_implem_decl:
 expr:
   | VAR             { Var $1 }
   | INT             { Int $1 }
+  | FLOAT           { Float $1 }
   | TRUE            { Bool true }
   | FALSE           { Bool false }
   | LPAR expr RPAR   { $2 }
@@ -64,6 +70,10 @@ expr:
   | expr MINUS expr    { BinaryOp (Minus, $1, $3) }
   | expr MULT expr     { BinaryOp (Mult, $1, $3) }
   | expr DIV expr      { BinaryOp (Div, $1, $3) }
+  | expr PLUSPT expr   { BinaryOp (PlusPT, $1, $3) }
+  | expr MINUSPT expr  { BinaryOp (MinusPT, $1, $3) }
+  | expr MULTPT expr   { BinaryOp (MultPT, $1, $3) }
+  | expr DIVPT expr    { BinaryOp (DivPT, $1, $3) }
   | NOT expr          { UnaryOp (Not, $2) }
   | expr LAND expr     { BinaryOp (And, $1, $3) }
   | expr LOR expr      { BinaryOp (Or, $1, $3) }

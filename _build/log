@@ -1,8 +1,11 @@
-# dune exec -- src/eval.exe Test/Bon/test1.sml
+# C:\Users\mbourycisse\AppData\Local\opam\default\bin\dune.exe exec -- src/eval.exe Test/Bon/test4.sml
 # OCAMLPARAM: unset
 # Shared cache: enabled-except-user-rules
-# Shared cache location: /home/mbaye/.cache/dune/db
-# Workspace root: /home/mbaye/projet-programmation-fonctionnelle
+# Shared cache location:
+# C:\Users\mbourycisse\AppData\Local\Microsoft\Windows\INetCache\dune\db
+# Workspace root: "C:\\Users\\mbourycisse\\Desktop\\L3 Informatique
+# Nantes\\semestre2\\Programmation
+# Fonctionnelle\\projet-programmation-fonctionnelle"
 # Auto-detected concurrency: 8
 # Dune context:
 #  { name = "default"
@@ -13,4 +16,4 @@
 #  ; build_dir = In_build_dir "default"
 #  ; instrument_with = []
 #  }
-$ /home/mbaye/.opam/5.3.0/bin/ocamlc.opt -config > /tmp/dune_f34970_output
+$ C:\Users\mbourycisse\AppData\Local\opam\default\bin\ocamlc.opt.exe -config > C:\Users\MBOURY~1\AppData\Local\Temp\dune_4317d2_output

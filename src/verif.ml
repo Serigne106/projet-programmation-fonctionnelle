@@ -45,33 +45,27 @@ let rec verif_expr env e typ_attendu =
       | Plus | Minus | Mult | Div -> 
           if typ_attendu <> TInt then failwith "Une opération arithmétique doit retourner un entier"; 
           verif_expr env e1 TInt && verif_expr env e2 TInt  (* Les deux opérandes doivent être des entiers *)
-
+      | PlusPT | MinusPT | MultPT | DivPT ->
+        if typ_attendu <> TFloat then failwith "Opération non defini"; 
+        verif_expr env e1 TFloat && verif_expr env e2 TFloat  (* Les deux opérandes doivent être des flottants *)
       | And | Or -> 
           if typ_attendu <> TBool then failwith "Une opération logique doit retourner un booléen";
           verif_expr env e1 TBool && verif_expr env e2 TBool  (* Les deux opérandes doivent être des booléens *)
 
       | Equal | NEqual -> 
-         let t1 = if verif_expr env e1 TInt then TInt 
-           else if verif_expr env e1 TBool then TBool 
-            else failwith "Type non supporté pour l'égalité"
-          in
-         let t2 = if verif_expr env e2 TInt then TInt 
-           else if verif_expr env e2 TBool then TBool 
-           else failwith "Type non supporté pour l'égalité"
-         in
-        (*
-          let t1 = match e1 with 
-            | Var x -> chercher_var x env.var_env 
-            | _ -> failwith "Expression incorrecte, une variable est attendue"
-          in
-          let t2 = match e2 with 
-            | Var x -> chercher_var x env.var_env 
-            | _ -> failwith "Expression incorrecte, une variable est attendue"
-          in
-          *)
-          if t1 = t2 then typ_attendu = TBool  (* Les deux opérandes doivent être du même type et le type attendu doit être TBool *)
-          else failwith "Les deux opérandes d'une comparaison doivent être du même type"
-          
+            let t1 = if verif_expr env e1 TInt then TInt 
+              else if verif_expr env e1 TBool then TBool
+              else if verif_expr env e1 TFloat then TFloat  (* Ajout du support des flottants *)
+              else failwith "Type non supporté pour l'égalité"
+            in
+            let t2 = if verif_expr env e2 TInt then TInt 
+              else if verif_expr env e2 TBool then TBool 
+              else if verif_expr env e2 TFloat then TFloat  (* Ajout du support des flottants *)
+              else failwith "Type non supporté pour l'égalité"
+            in
+            if t1 = t2 then typ_attendu = TBool
+            else failwith "Les deux opérandes d'une comparaison doivent être du même type"
+        
 
   
       | Less | LessEq | Great | GreatEq -> 
