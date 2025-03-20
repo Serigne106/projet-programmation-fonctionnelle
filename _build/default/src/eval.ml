@@ -1,7 +1,7 @@
 (* La fonction suivante récupère le nom de fichier passé en argument de la ligne de commande,
 ouvre le fichier et applique l'analyse lexicale dessus, renvoyant une valeur de type Lexing.lexbuf *)
 
-
+ 
 let get_lineBuffer () =
   if Array.length Sys.argv < 2 then
     failwith "Le nom de fichier à évaluer n'a pas été passé en argument."

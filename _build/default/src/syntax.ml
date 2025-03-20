@@ -30,7 +30,7 @@ type binary_op =
   | Or
   | Equal
   | NEqual
-  | Less
+  | Less 
   | LessEq
   | Great
   | GreatEq

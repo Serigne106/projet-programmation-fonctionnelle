@@ -60,7 +60,7 @@ expr:
   | INT             { Int $1 }
   | FLOAT           { Float $1 }
   | TRUE            { Bool true }
-  | FALSE           { Bool false }
+  | FALSE           { Bool false } 
   | LPAR expr RPAR   { $2 }
   | app_expr { $1 }
   | IF expr THEN expr ELSE expr        { If ($2, $4, $6) }

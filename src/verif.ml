@@ -6,6 +6,10 @@ type env_type = {
   fun_env : (idfun * ((idvar * typ) list * typ)) list;  (* Environnement des fonctions : liste d'associations (nom de fonction, (liste de paramètres, type de retour)) *)
 }
 
+let inti_env = { var_env = []; fun_env = [] }  (* Environnement initial vide *)
+
+(* Fonction pour ajouter une variable à l'environnement *)
+
 
 (* Fonction pour comparer deux listes de types *)
 let rec comparer_type env1 env2 = match (env1, env2) with
@@ -40,14 +44,24 @@ let rec verif_expr env e typ_attendu =
 
   | Bool _ -> typ_attendu = TBool  (* Si l'expression est un booléen, le type attendu doit être TBool *)
 
+  | Float _ -> typ_attendu = TFloat  (* Si l'expression est un flottant, le type attendu doit être TFloat *)
+
   | BinaryOp (op, e1, e2) -> (
       match op with
       | Plus | Minus | Mult | Div -> 
           if typ_attendu <> TInt then failwith "Une opération arithmétique doit retourner un entier"; 
           verif_expr env e1 TInt && verif_expr env e2 TInt  (* Les deux opérandes doivent être des entiers *)
       | PlusPT | MinusPT | MultPT | DivPT ->
-        if typ_attendu <> TFloat then failwith "Opération non defini"; 
-        verif_expr env e1 TFloat && verif_expr env e2 TFloat  (* Les deux opérandes doivent être des flottants *)
+       
+        
+          if not (verif_expr env e1 TFloat && verif_expr env e2 TFloat) then
+            failwith "Les opérandes doivent être des flottants"
+          else if typ_attendu <> TFloat then
+            failwith "Le type attendu doit être un flottant"
+          else
+            true  (* Retourne explicitement true si tout est correct *)
+
+
       | And | Or -> 
           if typ_attendu <> TBool then failwith "Une opération logique doit retourner un booléen";
           verif_expr env e1 TBool && verif_expr env e2 TBool  (* Les deux opérandes doivent être des booléens *)
@@ -106,9 +120,9 @@ let verif_decl_fun env fdecl =
   let params_env = {
     var_env = List.map (fun (x, t) -> (x, t)) fdecl.var_list; (* Ajout des paramètres à l'env local *)
     fun_env = env.fun_env
-  } in
+  } in 
   verif_expr params_env fdecl.corps fdecl.typ_retour (* Vérifie que le corps de la fonction est bien typé *)
-
+ 
 (* Vérification d'un programme *)
 let verif_prog prog =
   (* Construire un environnement initial avec toutes les fonctions *)
@@ -124,6 +138,9 @@ let verif_prog prog =
   (* Vérifier la présence d'une fonction `main` sans paramètres *)
   (*fonction anonyne qui *)
   let est_valid_main = List.exists (fun f -> f.id = "main" && f.var_list = []) prog in
+  
+
+  
   tout_funs_ok && est_valid_main (* Retourne vrai si tout est bien typé et que main() est défini *)
 
   

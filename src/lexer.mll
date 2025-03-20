@@ -3,7 +3,7 @@
   open Parser
 
   exception SyntaxError of string
-
+ 
   let newline lexbuf =
     let pos = lexbuf.lex_curr_p in
       lexbuf.lex_curr_p <-

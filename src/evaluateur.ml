@@ -5,7 +5,7 @@ type valeur =
   | ValInt of int  (* Représente une valeur entière *)
   | ValBool of bool  (* Représente une valeur booléenne *)
   | ValFloat of float  (* Représente une valeur flottante *)
-
+  
 (* Définition des environnements d'évaluation *)
 type env_val = (idvar * valeur) list  (* Associe les variables à leurs valeurs *)
 type env_funs = (idfun * (idvar list * expr)) list  (* Associe les fonctions à leurs paramètres et leur corps *)
@@ -23,7 +23,7 @@ let rec chercher_fonction id env_funs =
   | (g, (params, body)) :: rest -> 
       if id = g then (params, body)  (* Si la fonction est trouvée, on retourne ses paramètres et son corps *)
       else chercher_fonction id rest  (* Sinon, on continue la recherche *)
-
+  
 (* Évaluation des expressions *)
 let rec eval_expr env_val env_funs e =
   match e with
