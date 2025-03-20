@@ -6,10 +6,8 @@ type env_type = {
   fun_env : (idfun * ((idvar * typ) list * typ)) list;  (* Environnement des fonctions : liste d'associations (nom de fonction, (liste de paramètres, type de retour)) *)
 }
 
-let inti_env = { var_env = []; fun_env = [] }  (* Environnement initial vide *)
-
-(* Fonction pour ajouter une variable à l'environnement *)
-
+(* Environnement initial vide *)
+let inti_env = { var_env = []; fun_env = [] }
 
 (* Fonction pour comparer deux listes de types *)
 let rec comparer_type env1 env2 = match (env1, env2) with
@@ -23,103 +21,115 @@ let rec comparer_type env1 env2 = match (env1, env2) with
 let rec chercher_var x env_vars =
   match env_vars with
   | [] -> failwith ("Variable non définie: " ^ x)  (* La variable n'est pas trouvée *)
-  | (y, typ) :: rest -> if x = y then typ else chercher_var x rest  (* Si la variable est trouvée, on retourne son type, sinon on continue la recherche *)
+  | (y, typ) :: rest -> 
+      if x = y then typ  (* Si la variable est trouvée, on retourne son type *)
+      else chercher_var x rest  (* Sinon, on continue la recherche *)
 
 (* Fonction pour chercher une fonction dans l'environnement *)
 let rec chercher_fonction id env_funs =
   match env_funs with
   | [] -> failwith ("Fonction non définie: " ^ id)  (* La fonction n'est pas trouvée *)
   | (g, (params, ret_type)) :: rest -> 
-      if id = g then (params, ret_type) else chercher_fonction id rest  (* Si la fonction est trouvée, on retourne ses paramètres et son type de retour, sinon on continue la recherche *)
+      if id = g then (params, ret_type)  (* Si la fonction est trouvée, on retourne ses paramètres et son type de retour *)
+      else chercher_fonction id rest  (* Sinon, on continue la recherche *)
 
 (* Vérification du typage des expressions *)
 let rec verif_expr env e typ_attendu =
   match e with
   | Var x -> 
-      let t = chercher_var x env.var_env in  (* On cherche le type de la variable *)
-      if t = typ_attendu then true  (* Si le type correspond au type attendu, on retourne true *)
+      (* On cherche le type de la variable *)
+      let t = chercher_var x env.var_env in 
+      (* Si le type correspond au type attendu, on retourne true *)
+      if t = typ_attendu then true  
       else failwith ("La variable " ^ x ^ " n'a pas le type attendu")
 
-  | Int _ -> typ_attendu = TInt  (* Si l'expression est un entier, le type attendu doit être TInt *)
+  | Int _ -> 
+      (* Si l'expression est un entier, le type attendu doit être TInt *)
+      typ_attendu = TInt  
 
-  | Bool _ -> typ_attendu = TBool  (* Si l'expression est un booléen, le type attendu doit être TBool *)
+  | Bool _ -> 
+      (* Si l'expression est un booléen, le type attendu doit être TBool *)
+      typ_attendu = TBool 
 
-  | Float _ -> typ_attendu = TFloat  (* Si l'expression est un flottant, le type attendu doit être TFloat *)
-
-  | BinaryOp (op, e1, e2) -> (
-    
-      match op with
-      | Plus | Minus | Mult | Div -> 
-          if typ_attendu <> TInt then failwith "Une opération arithmétique doit retourner un entier"; 
-          verif_expr env e1 TInt && verif_expr env e2 TInt  (* Les deux opérandes doivent être des entiers *)
-      
-      
-      | PlusPT | MinusPT | MultPT | DivPT ->
-        if typ_attendu <> TFloat then failwith "Une opération arithmétique doit retourner un float"; 
-        verif_expr env e1 TFloat && verif_expr env e2 TFloat  (* Les deux opérandes doivent être des entiers *)
-    
-       
-      | And | Or -> 
-          if typ_attendu <> TBool then failwith "Une opération logique doit retourner un booléen";
-          verif_expr env e1 TBool && verif_expr env e2 TBool  (* Les deux opérandes doivent être des booléens *)
-
-      | Equal | NEqual -> 
-            let t1 = if verif_expr env e1 TInt then TInt 
-              else if verif_expr env e1 TBool then TBool
-              else if verif_expr env e1 TFloat then TFloat  (* Ajout du support des flottants *)
-              else failwith "Type non supporté pour l'égalité"
-            in
-            let t2 = if verif_expr env e2 TInt then TInt 
-              else if verif_expr env e2 TBool then TBool 
-              else if verif_expr env e2 TFloat then TFloat  (* Ajout du support des flottants *)
-              else failwith "Type non supporté pour l'égalité"
-            in
-            if t1 = t2 then typ_attendu = TBool
-            else failwith "Les deux opérandes d'une comparaison doivent être du même type"
-        
-
+  | Float _ -> 
+      (* Si l'expression est un flottant, le type attendu doit être TFloat *)
+      typ_attendu = TFloat  
   
-      | Less | LessEq | Great | GreatEq -> 
-          if typ_attendu <> TBool then failwith "Une comparaison doit retourner un booléen";
-          verif_expr env e1 TInt && verif_expr env e2 TInt  (* Les deux opérandes doivent être des entiers *)
+  | BinaryOp (op, e1, e2) -> (
+      (* Vérification des opérations binaires *)
+      match (op, typ_attendu) with
+      | (Plus | Minus | Mult | Div), TInt -> 
+          (* Les deux opérandes doivent être des entiers *)
+          verif_expr env e1 TInt && verif_expr env e2 TInt  
+      
+      | (PlusPT | MinusPT | MultPT | DivPT), TFloat ->
+          (* Les deux opérandes doivent être des flottants *)
+          verif_expr env e1 TFloat && verif_expr env e2 TFloat  
     
+      | (And | Or), TBool -> 
+          (* Les deux opérandes doivent être des booléens *)
+          verif_expr env e1 TBool && verif_expr env e2 TBool  
+
+      | (Equal | NEqual), TBool -> 
+          (* Les deux opérandes doivent être soit des entiers, soit des flottants *)
+          ((verif_expr env e1 TInt && verif_expr env e2 TInt) || 
+          (verif_expr env e1 TFloat && verif_expr env e2 TFloat))
+       
+      | (Less | LessEq | Great | GreatEq), TBool -> 
+          (* Les deux opérandes doivent être soit des entiers, soit des flottants *)
+          ((verif_expr env e1 TInt && verif_expr env e2 TInt) || 
+          (verif_expr env e1 TFloat && verif_expr env e2 TFloat)) 
+      
+      | _ -> false  
     )
 
   | UnaryOp (Not, e) -> 
+      (* Vérification de l'opérateur unaire 'not' *)
       if typ_attendu <> TBool then failwith "L'opérateur 'not' doit retourner un booléen";
       verif_expr env e TBool  (* L'opérande doit être un booléen *)
 
   | If (cond, e1, e2) -> 
+      (* Vérification d'une structure conditionnelle *)
       if not (verif_expr env cond TBool) then
         failwith "La condition d'un 'if' doit être un booléen";
-      verif_expr env e1 typ_attendu && verif_expr env e2 typ_attendu  (* Les deux branches doivent avoir le type attendu *)
+      (* Les deux branches doivent avoir le type attendu *)
+      verif_expr env e1 typ_attendu && verif_expr env e2 typ_attendu  
 
   | Let (x, typ_x, e1, e2) ->
+      (* Vérification d'une déclaration locale *)
       if not (verif_expr env e1 typ_x) then
         failwith ("Mauvais typage dans 'let' pour la variable " ^ x);
-      let new_env = { env with var_env = (x, typ_x) :: env.var_env } in  (* On ajoute la nouvelle variable à l'environnement *)
-      verif_expr new_env e2 typ_attendu  (* On vérifie le typage de l'expression e2 dans le nouvel environnement *)
+      (* On ajoute la nouvelle variable à l'environnement *)
+      let new_env = { env with var_env = (x, typ_x) :: env.var_env } in  
+      (* On vérifie le typage de l'expression suivante *)
+      verif_expr new_env e2 typ_attendu  
 
   | App (f, args) ->
-      let (params_types, ret_type) = chercher_fonction f env.fun_env in  (* On cherche les paramètres et le type de retour de la fonction *)
+      (* Vérification d'un appel de fonction *)
+      let (params_types, ret_type) = chercher_fonction f env.fun_env in  
+      (* On vérifie que le nombre d'arguments correspond au nombre de paramètres *)
       if List.length args <> List.length params_types then
         failwith ("Mauvais nombre d'arguments pour la fonction " ^ f);
+      (* On vérifie le typage de chaque argument *)
       List.iter2
         (fun expr typ_attendu ->
           if not (verif_expr env expr typ_attendu) then
             failwith ("Mauvais type d'argument pour la fonction " ^ f))
-        args (List.map snd params_types);  (* On vérifie le typage de chaque argument *)
-      ret_type = typ_attendu  (* Le type de retour doit correspondre au type attendu *)
+        args (List.map snd params_types);  
+      (* Le type de retour doit correspondre au type attendu *)
+      ret_type = typ_attendu  
 
   | _ -> failwith "Erreur de typage"
 
 (* Vérification du typage d'une déclaration de fonction *)
 let verif_decl_fun env fdecl =
+  (* Création d'un environnement local pour les paramètres *)
   let params_env = {
-    var_env = List.map (fun (x, t) -> (x, t)) fdecl.var_list; (* Ajout des paramètres à l'env local *)
+    var_env = List.map (fun (x, t) -> (x, t)) fdecl.var_list; 
     fun_env = env.fun_env
   } in 
-  verif_expr params_env fdecl.corps fdecl.typ_retour (* Vérifie que le corps de la fonction est bien typé *)
+  (* Vérifie que le corps de la fonction est bien typé *)
+  verif_expr params_env fdecl.corps fdecl.typ_retour 
  
 (* Vérification d'un programme *)
 let verif_prog prog =
@@ -134,13 +144,7 @@ let verif_prog prog =
   let tout_funs_ok = List.for_all (fun f -> verif_decl_fun init_env f) prog in
 
   (* Vérifier la présence d'une fonction `main` sans paramètres *)
-  (*fonction anonyne qui *)
   let est_valid_main = List.exists (fun f -> f.id = "main" && f.var_list = []) prog in
   
-
-  
-  tout_funs_ok && est_valid_main (* Retourne vrai si tout est bien typé et que main() est défini *)
-
-  
-
-
+  (* Retourne vrai si tout est bien typé et que main() est défini *)
+  tout_funs_ok && est_valid_main 

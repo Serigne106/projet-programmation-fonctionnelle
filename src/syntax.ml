@@ -62,7 +62,7 @@ type fun_decl = {
   typ_retour: typ;
   corps: expr;
 }
-
+ 
 (* Définition du type des programmes de SimpleML *)
 
 type programme = fun_decl list
