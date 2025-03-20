@@ -47,21 +47,18 @@ let rec verif_expr env e typ_attendu =
   | Float _ -> typ_attendu = TFloat  (* Si l'expression est un flottant, le type attendu doit être TFloat *)
 
   | BinaryOp (op, e1, e2) -> (
+    
       match op with
       | Plus | Minus | Mult | Div -> 
           if typ_attendu <> TInt then failwith "Une opération arithmétique doit retourner un entier"; 
           verif_expr env e1 TInt && verif_expr env e2 TInt  (* Les deux opérandes doivent être des entiers *)
+      
+      
       | PlusPT | MinusPT | MultPT | DivPT ->
+        if typ_attendu <> TFloat then failwith "Une opération arithmétique doit retourner un float"; 
+        verif_expr env e1 TFloat && verif_expr env e2 TFloat  (* Les deux opérandes doivent être des entiers *)
+    
        
-        
-          if not (verif_expr env e1 TFloat && verif_expr env e2 TFloat) then
-            failwith "Les opérandes doivent être des flottants"
-          else if typ_attendu <> TFloat then
-            failwith "Le type attendu doit être un flottant"
-          else
-            true  (* Retourne explicitement true si tout est correct *)
-
-
       | And | Or -> 
           if typ_attendu <> TBool then failwith "Une opération logique doit retourner un booléen";
           verif_expr env e1 TBool && verif_expr env e2 TBool  (* Les deux opérandes doivent être des booléens *)
@@ -85,6 +82,7 @@ let rec verif_expr env e typ_attendu =
       | Less | LessEq | Great | GreatEq -> 
           if typ_attendu <> TBool then failwith "Une comparaison doit retourner un booléen";
           verif_expr env e1 TInt && verif_expr env e2 TInt  (* Les deux opérandes doivent être des entiers *)
+    
     )
 
   | UnaryOp (Not, e) -> 

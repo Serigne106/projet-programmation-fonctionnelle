@@ -30,6 +30,7 @@ let rec eval_expr env_val env_funs e =
   | Var x -> chercher_val x env_val  (* Si l'expression est une variable, on cherche sa valeur dans l'environnement *)
   | Int x -> ValInt x  (* Si l'expression est un entier, on retourne sa valeur *)
   | Bool b -> ValBool b  (* Si l'expression est un booléen, on retourne sa valeur *)
+  | Float f -> ValFloat f  (* Si l'expression est un flottant, on retourne sa valeur *)
 
   (* Évaluation des opérations binaires *)
   | BinaryOp (op, e1, e2) -> (
@@ -60,10 +61,10 @@ let rec eval_expr env_val env_funs e =
       | (Great, ValFloat a, ValFloat b) -> ValBool (a > b)  (* Supérieur à *)
       | (GreatEq, ValFloat a, ValFloat b) -> ValBool (a >= b)  (* Supérieur ou égal à *)
 
-      |(PlusPT, ValFloat a, ValFloat b) -> ValFloat (a +. b)  (* Addition *)
-      |(MinusPT, ValFloat a, ValFloat b) -> ValFloat (a -. b)  (* Addition *)
-      |(MultPT, ValFloat a, ValFloat b) -> ValFloat (a *. b)  (* Addition *)
-      |(DivPT, ValFloat a, ValFloat b) -> ValFloat (a /. b)  (* Addition *)
+      |(PlusPT, ValFloat a, ValFloat b) -> ValFloat (a+.b)  (* Addition *)
+      |(MinusPT, ValFloat a, ValFloat b) -> ValFloat (a-.b)  (* Addition *)
+      |(MultPT, ValFloat a, ValFloat b) -> ValFloat (a*.b)  (* Addition *)
+      |(DivPT, ValFloat a, ValFloat b) -> ValFloat (a/.b)  (* Addition *)
 
       | _ -> failwith "Erreur de types dans l'opération binaire"  (* Si les types ne correspondent pas *)
     )

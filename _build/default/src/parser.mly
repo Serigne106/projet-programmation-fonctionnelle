@@ -27,7 +27,7 @@
 %nonassoc EQ NEQ GREAT GREATEQ LESS LESSEQ
 %left LOR
 %left LAND
-%left PLUS MINUS
+%left PLUS MINUS 
 %left MULT DIV
 %left PLUSPT MINUSPT
 %left MULTPT DIVPT

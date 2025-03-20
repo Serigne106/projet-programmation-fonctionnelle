@@ -29,7 +29,6 @@ rule token = parse
   | '-'  { MINUS }
   | '*'  { MULT }
   | '/'  { DIV }
-
   | "+."  { PLUSPT }
   | "-."  { MINUSPT }
   | "*."  { MULTPT }
