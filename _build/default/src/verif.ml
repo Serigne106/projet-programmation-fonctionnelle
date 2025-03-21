@@ -119,6 +119,10 @@ let rec verif_expr env e typ_attendu =
       (* Le type de retour doit correspondre au type attendu *)
       ret_type = typ_attendu  
 
+  |PrintInt e -> 
+      (* Vérification de l'expression print_int *)
+      verif_expr env e TUnit  
+
   | _ -> failwith "Erreur de typage"
 
 (* Vérification du typage d'une déclaration de fonction *)
