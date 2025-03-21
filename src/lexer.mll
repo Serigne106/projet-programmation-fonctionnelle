@@ -39,6 +39,7 @@ rule token = parse
   | "&&" { LAND }
   | "||" { LOR }
   | "not" { NOT }
+  | "print_int" { PRINTINT }
   | ">" { GREAT }
   | ">=" { GREATEQ }
   | "<" { LESS }
@@ -58,6 +59,7 @@ rule token = parse
   | "int" { TINT }
   | "bool" { TBOOL }
   | "float" { TFLOAT }
+  | "unit" { TUNIT }
 
 
   | '('  { LPAR }

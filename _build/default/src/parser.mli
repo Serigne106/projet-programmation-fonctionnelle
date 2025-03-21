@@ -12,6 +12,7 @@ type token =
   | TBOOL
   | SEMICOLON
   | RPAR
+  | PRINTINT
   | PLUSPT
   | PLUS
   | NOT

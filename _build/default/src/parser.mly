@@ -11,7 +11,7 @@
 %token EQ
 %token PLUS MINUS MULT DIV
 %token PLUSPT MINUSPT MULTPT DIVPT
-%token LAND LOR NOT
+%token LAND LOR NOT PRINTINT
 %token NEQ GREAT GREATEQ LESS LESSEQ
 %token TRUE FALSE
 %token LPAR RPAR COMMA COLON
@@ -24,8 +24,10 @@
 %token TUNIT
 %token SEMICOLON
 
-%left ELSE IN
-%nonassoc NOT
+%left IN
+%left SEMICOLON
+%left ELSE
+%nonassoc NOT PRINTINT
 %nonassoc EQ NEQ GREAT GREATEQ LESS LESSEQ
 %left LOR
 %left LAND
@@ -88,6 +90,7 @@ expr:
   | expr LESS expr    { BinaryOp (Less, $1, $3) }
   | expr LESSEQ expr  { BinaryOp (LessEq, $1, $3) }
   | expr SEMICOLON expr { Seq ($1, $3) }
+  | PRINTINT  expr   { PrintInt $2 }
 
 app_expr:
   | VAR LPAR list_expr RPAR { App ($1, $3) }

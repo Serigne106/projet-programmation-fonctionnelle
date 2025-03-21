@@ -54,7 +54,7 @@ type expr =
   | If of expr * expr * expr
   | Let of idvar * typ * expr * expr
   | App of idfun * expr list 
-
+  | PrintInt of expr
 (* Définition du type des déclarations de fonction de SimpleML *)
 
 type fun_decl = {
@@ -124,6 +124,7 @@ and string_of_expr expr =
       ^ " in " ^ string_of_expr expr2
   | App (idfun, expr_list) -> idfun ^ "(" ^ string_of_expr_list expr_list ^ ")" 
   | Seq (expr1, expr2) -> string_of_expr expr1 ^ ";" ^ string_of_expr expr2
+  | PrintInt expr -> "print_int(" ^ string_of_expr expr ^ ")"
   
 let rec string_of_var_list var_list =
   match var_list with

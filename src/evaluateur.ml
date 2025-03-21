@@ -32,7 +32,6 @@ let rec eval_expr env_val env_funs e =
   | Int x -> ValInt x  (* Si l'expression est un entier, on retourne sa valeur *)
   | Bool b -> ValBool b  (* Si l'expression est un booléen, on retourne sa valeur *)
   | Float f -> ValFloat f  (* Si l'expression est un flottant, on retourne sa valeur *)
-  (*| TUnit -> ValUnit  (* Si l'expression est de type unité, on retourne la valeur unité *)*)
   | Unit -> ValUnit
 
   (* Évaluation des opérations binaires *)
@@ -104,6 +103,12 @@ let rec eval_expr env_val env_funs e =
     let new_env_val = List.fold_left2 (fun acc param value -> (param, value) :: acc) env_val param_names args_values in
     eval_expr new_env_val env_funs body
 
+  | PrintInt  e -> 
+    begin match eval_expr env_val env_funs e with
+    | ValInt n -> print_endline (string_of_int n);
+                 ValUnit
+    | _ -> failwith "Expression non reconnue" 
+   end
   | _ -> failwith "Expression non reconnue"
 
 
