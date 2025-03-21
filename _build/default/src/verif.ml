@@ -2,36 +2,52 @@ open Syntax
 
 (* Définition des environnements *)
 type env_type = {
-  var_env : (idvar * typ) list;  (* Environnement des variables : liste d'associations (nom de variable, type) *)
-  fun_env : (idfun * ((idvar * typ) list * typ)) list;  (* Environnement des fonctions : liste d'associations (nom de fonction, (liste de paramètres, type de retour)) *)
+  (* Environnement des variables : liste d'associations (nom de variable, type) *)
+  var_env : (idvar * typ) list;  
+  (* Environnement des fonctions : liste d'associations (nom de fonction, (liste de paramètres, type de retour)) *)
+  fun_env : (idfun * ((idvar * typ) list * typ)) list;  
 }
 
 (* Environnement initial vide *)
-let inti_env = { var_env = []; fun_env = [] }
+let init_env = { 
+  var_env = []; 
+  fun_env = [] 
+}
 
 (* Fonction pour comparer deux listes de types *)
 let rec comparer_type env1 env2 = match (env1, env2) with
-| ([], []) -> true  (* Les deux listes sont vides, elles sont donc égales *)
+   (* Les deux listes sont vides, elles sont donc égales *)
+| ([], []) -> true 
+    (* Les têtes des listes sont égales, on compare les queues *)
 | ((idvar1, typ1) :: t1, (idvar2, typ2) :: t2) -> 
-    if idvar1 = idvar2 && typ1 = typ2 then comparer_type t1 t2  (* Les têtes des listes sont égales, on compare les queues *)
-    else false  (* Les têtes des listes sont différentes, les listes ne sont pas égales *)
-| _ -> false  (* Les listes ont des longueurs différentes, elles ne sont pas égales *)
+    if idvar1 = idvar2 && typ1 = typ2 then comparer_type t1 t2  
+    (* Les têtes des listes sont différentes, les listes ne sont pas égales *)
+    else false  
+    (* Les listes ont des longueurs différentes, elles ne sont pas égales *)
+| _ -> false  
 
 (* Fonction pour chercher une variable dans l'environnement *)
 let rec chercher_var x env_vars =
   match env_vars with
-  | [] -> failwith ("Variable non définie: " ^ x)  (* La variable n'est pas trouvée *)
+     (* La variable n'est pas trouvée *)
+  | [] -> failwith ("Variable non définie: " ^ x) 
+      (* Si la variable est trouvée, on retourne son type *)
   | (y, typ) :: rest -> 
-      if x = y then typ  (* Si la variable est trouvée, on retourne son type *)
-      else chercher_var x rest  (* Sinon, on continue la recherche *)
+      if x = y then typ  
+      (* Sinon, on continue la recherche *)
+      else chercher_var x rest  
 
 (* Fonction pour chercher une fonction dans l'environnement *)
 let rec chercher_fonction id env_funs =
   match env_funs with
-  | [] -> failwith ("Fonction non définie: " ^ id)  (* La fonction n'est pas trouvée *)
+      (* La fonction n'est pas trouvée *)
+  | [] -> failwith ("Fonction non définie: " ^ id)  
+      (* Si la fonction est trouvée, on retourne ses paramètres et son type de retour *)
   | (g, (params, ret_type)) :: rest -> 
-      if id = g then (params, ret_type)  (* Si la fonction est trouvée, on retourne ses paramètres et son type de retour *)
-      else chercher_fonction id rest  (* Sinon, on continue la recherche *)
+      if id = g then (params, ret_type)  
+      (* Sinon, on continue la recherche *)
+      else chercher_fonction id rest  
+
 
 (* Vérification du typage des expressions *)
 let rec verif_expr env e typ_attendu =
@@ -55,6 +71,11 @@ let rec verif_expr env e typ_attendu =
       (* Si l'expression est un flottant, le type attendu doit être TFloat *)
       typ_attendu = TFloat  
   
+      (* Si l'expression est de type unité, le type attendu doit être TUnit *) 
+  | Unit -> typ_attendu = TUnit
+   
+  
+      (*Les operations binaires *)
   | BinaryOp (op, e1, e2) -> (
       (* Vérification des opérations binaires *)
       match (op, typ_attendu) with
@@ -86,7 +107,8 @@ let rec verif_expr env e typ_attendu =
   | UnaryOp (Not, e) -> 
       (* Vérification de l'opérateur unaire 'not' *)
       if typ_attendu <> TBool then failwith "L'opérateur 'not' doit retourner un booléen";
-      verif_expr env e TBool  (* L'opérande doit être un booléen *)
+      (* L'opérande doit être un booléen *)
+      verif_expr env e TBool  
 
   | If (cond, e1, e2) -> 
       (* Vérification d'une structure conditionnelle *)

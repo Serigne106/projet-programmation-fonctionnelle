@@ -1,5 +1,7 @@
 type token =
     VAR of string
+  | UNIT of unit
+  | TUNIT
   | TRUE
   | TINT
   | THEN

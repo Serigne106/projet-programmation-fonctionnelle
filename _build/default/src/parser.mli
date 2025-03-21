@@ -3,6 +3,8 @@
 
 type token = 
   | VAR of (Syntax.idvar)
+  | UNIT of (unit)
+  | TUNIT
   | TRUE
   | TINT
   | THEN

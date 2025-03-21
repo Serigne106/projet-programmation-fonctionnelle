@@ -6,6 +6,7 @@
 %token EOF
 %token <int> INT
 %token <float> FLOAT
+%token <unit> UNIT
 %token <Syntax.idvar> VAR
 %token EQ
 %token PLUS MINUS MULT DIV
@@ -20,6 +21,7 @@
 %token TINT
 %token TBOOL
 %token TFLOAT
+%token TUNIT
 %token SEMICOLON
 
 %left ELSE IN
@@ -45,6 +47,7 @@ ty:
   | TBOOL        { TBool }
   | TINT         { TInt }
   | TFLOAT       { TFloat }
+  | TUNIT        { TUnit }
 
 fun_decl:
   | LET VAR LPAR list_typed_ident RPAR COLON ty EQ expr
@@ -59,6 +62,7 @@ expr:
   | VAR             { Var $1 }
   | INT             { Int $1 }
   | FLOAT           { Float $1 }
+  | UNIT            { Unit  }
   | TRUE            { Bool true }
   | FALSE           { Bool false } 
   | LPAR expr RPAR   { $2 }

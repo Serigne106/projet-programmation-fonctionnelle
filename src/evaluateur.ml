@@ -5,6 +5,7 @@ type valeur =
   | ValInt of int  (* Représente une valeur entière *)
   | ValBool of bool  (* Représente une valeur booléenne *)
   | ValFloat of float  (* Représente une valeur flottante *)
+  | ValUnit  (* Représente la valeur unité *)
   
 (* Définition des environnements d'évaluation *)
 type env_val = (idvar * valeur) list  (* Associe les variables à leurs valeurs *)
@@ -31,6 +32,8 @@ let rec eval_expr env_val env_funs e =
   | Int x -> ValInt x  (* Si l'expression est un entier, on retourne sa valeur *)
   | Bool b -> ValBool b  (* Si l'expression est un booléen, on retourne sa valeur *)
   | Float f -> ValFloat f  (* Si l'expression est un flottant, on retourne sa valeur *)
+  (*| TUnit -> ValUnit  (* Si l'expression est de type unité, on retourne la valeur unité *)*)
+  | Unit -> ValUnit
 
   (* Évaluation des opérations binaires *)
   | BinaryOp (op, e1, e2) -> (
@@ -103,14 +106,7 @@ let rec eval_expr env_val env_funs e =
 
   | _ -> failwith "Expression non reconnue"
 
- (* | App (f, args) ->
-      let (param_names, body) = chercher_fonction f env_funs in  (* Chercher la fonction dans l'environnement *)
-      let args_values = List.map (fun arg -> eval_expr env_val env_funs arg) args in  (* Évaluer les arguments *)
-      let new_env_val = List.combine param_names args_values in  (* Associer les paramètres aux arguments évalués *)
-      eval_expr new_env_val env_funs body  (* Évaluer le corps de la fonction avec le nouvel environnement *)
 
-  | _ -> failwith "Expression non reconnue"  (* Si l'expression n'est pas supportée *)
-*)
 
 (* Évaluation d'un programme *)
 let eval_prog prog =
@@ -134,5 +130,6 @@ let eval_prog prog =
     | ValInt n -> print_endline (string_of_int n)  (* Afficher un entier *)
     | ValBool b -> print_endline (string_of_bool b)  (* Afficher un booléen *)
     | ValFloat f -> print_endline (string_of_float f)  (* Afficher un flottant *)
+    | ValUnit -> print_endline "()"  (* Afficher la valeur unité *)
   with Not_found ->
     failwith "La fonction 'main' est absente du programme"  (* Si `main` n'est pas définie *)

@@ -46,6 +46,7 @@ type expr =
   | IdFun of idfun
   | Int of int
   | Float of float
+  | Unit 
   | Bool of bool
   | BinaryOp of binary_op * expr * expr
   | UnaryOp of unary_op * expr
@@ -109,7 +110,8 @@ and string_of_expr expr =
   | Var x -> x
   | IdFun x -> x
   | Int n -> string_of_int n
-  | Float f -> string_of_float f
+  | Float f -> string_of_float f 
+  | Unit -> "()" 
   | Bool b -> string_of_bool b
   | BinaryOp (binop, expr1, expr2) ->
       string_of_expr expr1 ^ string_of_binary_op binop ^ string_of_expr expr2
@@ -122,7 +124,7 @@ and string_of_expr expr =
       ^ " in " ^ string_of_expr expr2
   | App (idfun, expr_list) -> idfun ^ "(" ^ string_of_expr_list expr_list ^ ")" 
   | Seq (expr1, expr2) -> string_of_expr expr1 ^ ";" ^ string_of_expr expr2
-
+  
 let rec string_of_var_list var_list =
   match var_list with
   | [] -> ""
