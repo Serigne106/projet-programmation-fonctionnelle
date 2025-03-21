@@ -62,7 +62,7 @@ let rec eval_expr env_val env_funs e =
       | (GreatEq, ValFloat a, ValFloat b) -> ValBool (a >= b)  (* Supérieur ou égal à *)
 
       |(PlusPT, ValFloat a, ValFloat b) -> ValFloat (a+.b)  (* Addition *)
-      |(MinusPT, ValFloat a, ValFloat b) -> ValFloat (a-.b)  (* Addition *)
+      |(MinusPT, ValFloat a, ValFloat b) -> ValFloat (a-.b)  (* Addition *) 
       |(MultPT, ValFloat a, ValFloat b) -> ValFloat (a*.b)  (* Addition *)
       |(DivPT, ValFloat a, ValFloat b) -> ValFloat (a/.b)  (* Addition *)
 
