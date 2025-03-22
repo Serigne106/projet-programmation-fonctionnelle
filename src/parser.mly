@@ -15,8 +15,9 @@
 %token NEQ GREAT GREATEQ LESS LESSEQ
 %token TRUE FALSE
 %token LPAR RPAR COMMA COLON
-%token LET IN
+%token LET IN LETREC
 %token IF THEN ELSE
+
 
 %token TINT
 %token TBOOL
@@ -27,7 +28,7 @@
 %left IN
 %left SEMICOLON
 %left ELSE
-%nonassoc NOT PRINTINT
+%nonassoc NOT PRINTINT 
 %nonassoc EQ NEQ GREAT GREATEQ LESS LESSEQ
 %left LOR
 %left LAND
@@ -43,7 +44,7 @@
 
 %%
 
-prog: list_implem_decl; EOF  { $1 }
+prog: list_implem_decl; EOF  { $1 }; 
 
 ty:
   | TBOOL        { TBool }
@@ -72,6 +73,8 @@ expr:
   | IF expr THEN expr ELSE expr        { If ($2, $4, $6) }
   | LET LPAR VAR COLON ty RPAR EQ expr IN expr
     { Let ($3, $5, $8, $10) }
+  | LETREC VAR LPAR list_typed_ident RPAR COLON ty EQ expr IN expr
+  { LetRec ($2, $4, $7, $9, $11) }
   | expr PLUS expr     { BinaryOp (Plus, $1, $3) }
   | expr MINUS expr    { BinaryOp (Minus, $1, $3) }
   | expr MULT expr     { BinaryOp (Mult, $1, $3) }

@@ -146,6 +146,12 @@ let rec verif_expr env e typ_attendu =
 
         verif_expr env e TInt  
 
+  | LetRec (f, params, ret_type, e1, _) ->
+          (* Vérification d'une déclaration de fonction récursive *)
+          let new_env = { env with fun_env = (f, (params, ret_type)) :: env.fun_env } in  
+          (* On vérifie le typage de l'expression suivante *)
+          verif_expr new_env e1 typ_attendu
+
   | _ -> failwith "Erreur de typage"
 
 (* Vérification du typage d'une déclaration de fonction *)

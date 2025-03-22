@@ -93,7 +93,12 @@ let rec eval_expr env_val env_funs e =
       eval_expr nouvel_env env_funs e2  (* Évaluer e2 dans le nouvel environnement *)
   
 
-      
+  | LetRec (f, params, _, _, body) ->
+        let env_val' = (f, ValUnit) :: env_val in  (* Add function to the value environment *)
+        let env_funs' = (f, (List.map fst params, body)) :: env_funs in  (* Add function to the function environment *)
+        eval_expr env_val' env_funs' body  (* Evaluate the function body *)
+    
+
   (* Évaluation des appels de fonctions *)
   | App (f, args) ->
     let (param_names, body) = chercher_fonction f env_funs in
