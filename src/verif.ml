@@ -66,13 +66,13 @@ let rec verif_expr env e typ_attendu =
   | Bool _ -> 
       (* Si l'expression est un booléen, le type attendu doit être TBool *)
       typ_attendu = TBool 
-
+ 
   | Float _ -> 
       (* Si l'expression est un flottant, le type attendu doit être TFloat *)
       typ_attendu = TFloat  
   
       (* Si l'expression est de type unité, le type attendu doit être TUnit *) 
-  | Unit -> typ_attendu = TUnit
+  |  Unit -> typ_attendu = TUnit
    
   
       (*Les operations binaires *)
@@ -144,7 +144,7 @@ let rec verif_expr env e typ_attendu =
       (* Vérification de l'expression print_int *)
       if typ_attendu <> TUnit then failwith "L'opérateur 'print_int' doit retourner un unit";
 
-        verif_expr env e TUnit  
+        verif_expr env e TInt  
 
   | _ -> failwith "Erreur de typage"
 

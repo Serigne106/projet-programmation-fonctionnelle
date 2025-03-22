@@ -91,9 +91,10 @@ let rec eval_expr env_val env_funs e =
       let valeur_e1 = eval_expr env_val env_funs e1 in  (* Évaluer e1 *)
       let nouvel_env = (x, valeur_e1) :: env_val in  (* Ajouter la variable à l'environnement *)
       eval_expr nouvel_env env_funs e2  (* Évaluer e2 dans le nouvel environnement *)
+  
 
+      
   (* Évaluation des appels de fonctions *)
- 
   | App (f, args) ->
     let (param_names, body) = chercher_fonction f env_funs in
     let args_values = List.map (fun arg -> eval_expr env_val env_funs arg) args in

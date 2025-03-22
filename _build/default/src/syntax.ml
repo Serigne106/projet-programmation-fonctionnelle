@@ -1,9 +1,6 @@
 (* typ représente les types de SimpleML *)
 type typ = TInt | TBool | TFloat | TUnit 
 
-(* env_type représente les types des variables de SimpleML *)
-(*type env_type = (string * typ) list*)
-
 
 
 
