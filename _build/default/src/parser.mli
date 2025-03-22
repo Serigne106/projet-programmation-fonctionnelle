@@ -23,6 +23,7 @@ type token =
   | MINUS
   | LPAR
   | LOR
+  | LETREC
   | LET
   | LESSEQ
   | LESS

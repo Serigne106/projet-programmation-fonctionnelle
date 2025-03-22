@@ -49,7 +49,7 @@ rule token = parse
 
   | "let"  { LET }
   | "in"  { IN }
-
+  | "let rec"  { LETREC }
 
   | "if" { IF }
   | "then" { THEN }

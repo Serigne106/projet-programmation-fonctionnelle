@@ -55,7 +55,7 @@ type expr =
   | Let of idvar * typ * expr * expr
   | App of idfun * expr list 
   | PrintInt of expr
-(* Définition du type des déclarations de fonction de SimpleML *)
+  | LetRec of string * (string * typ) list * typ * expr * expr(* Définition du type des déclarations de fonction de SimpleML *)
 
 type fun_decl = {
   id: idfun;
@@ -99,6 +99,14 @@ let print_entier n = print_int n
 
 let string_of_unary_op unop = match unop with Not -> "not"
 
+let rec string_of_var_list var_list =
+  match var_list with
+  | [] -> ""
+  | [ (x, ty) ] -> x ^ ":" ^ string_of_type ty
+  | (x, ty) :: var_list' ->
+      x ^ ":" ^ string_of_type ty ^ "," ^ string_of_var_list var_list'
+
+
 let rec string_of_expr_list expr_list =
   match expr_list with
   | [] -> ""
@@ -125,13 +133,9 @@ and string_of_expr expr =
   | App (idfun, expr_list) -> idfun ^ "(" ^ string_of_expr_list expr_list ^ ")" 
   | Seq (expr1, expr2) -> string_of_expr expr1 ^ ";" ^ string_of_expr expr2
   | PrintInt expr -> "print_int(" ^ string_of_expr expr ^ ")"
-  
-let rec string_of_var_list var_list =
-  match var_list with
-  | [] -> ""
-  | [ (x, ty) ] -> x ^ ":" ^ string_of_type ty
-  | (x, ty) :: var_list' ->
-      x ^ ":" ^ string_of_type ty ^ "," ^ string_of_var_list var_list'
+  | LetRec (idfun, var_list, typ, expr1, expr2) ->
+    "let rec " ^ idfun ^ "(" ^ string_of_var_list var_list ^ ") : "
+    ^ string_of_type typ ^ " = " ^ string_of_expr expr1 ^ " in " ^ string_of_expr expr2     
 
 let string_of_fun_decl fdecl =
   "let " ^ fdecl.id ^ "("
