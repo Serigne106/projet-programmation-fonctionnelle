@@ -1,0 +1,10 @@
+(ocamllex lexer)
+
+(menhir
+ (modules parser))
+
+(executable
+ (name eval)
+ (modules eval syntax evaluateur verif lexer parser)
+ )
+

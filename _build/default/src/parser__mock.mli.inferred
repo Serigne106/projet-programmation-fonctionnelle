@@ -1,0 +1,52 @@
+type token =
+    VAR of string
+  | UNIT of unit
+  | TUNIT
+  | TRUE
+  | TINT
+  | THEN
+  | TFLOAT
+  | TBOOL
+  | SEMICOLON
+  | RPAR
+  | PRINTINT
+  | PLUSPT
+  | PLUS
+  | NOT
+  | NEQ
+  | MULTPT
+  | MULT
+  | MINUSPT
+  | MINUS
+  | LPAR
+  | LOR
+  | LETREC
+  | LET
+  | LESSEQ
+  | LESS
+  | LAND
+  | INT of int
+  | IN
+  | IF
+  | GREATEQ
+  | GREAT
+  | FLOAT of float
+  | FALSE
+  | EQ
+  | EOF
+  | ELSE
+  | DIVPT
+  | DIV
+  | COMMA
+  | COLON
+val menhir_begin_marker : int
+val xv_typed_ident : string * Syntax.typ
+val xv_ty : Syntax.typ
+val xv_prog : Syntax.programme
+val xv_list_typed_ident : (string * Syntax.typ) list
+val xv_list_implem_decl : Syntax.programme
+val xv_list_expr : Syntax.expr list
+val xv_fun_decl : Syntax.fun_decl
+val xv_expr : Syntax.expr
+val xv_app_expr : Syntax.expr
+val menhir_end_marker : int
