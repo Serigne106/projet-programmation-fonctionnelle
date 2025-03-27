@@ -4,4 +4,3 @@ let rec fact (n : int) : int =
 let main () : unit =
   print_int (fact 5)
 
-
